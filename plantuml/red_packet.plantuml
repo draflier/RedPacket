@@ -1,0 +1,21 @@
+@startuml
+participant Sender
+participant Vault
+participant "QR Code"
+participant Receiver
+
+
+Sender -> Vault: Sends the USDC 
+activate Vault
+Vault -> "QR Code": Generates link in form of QR Code
+activate "QR Code"
+"QR Code" -> Sender: QR Code is send to Sender to give to Receiver
+Sender -> Receiver: QR Code is sent to receiver 
+Receiver -> "QR Code": Receiver scans QR Code
+
+"QR Code" -> Vault: QR Code authenticates and authorizes the funds to be moved to receiver.
+deactivate "QR Code"
+Vault -> Receiver: Send funds to receiver
+deactivate Vault
+
+@enduml

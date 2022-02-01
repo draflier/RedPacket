@@ -11,8 +11,9 @@ High Level Architecture
 
 POC Assumptions
 -------------------------
-1) One EVM Chain
+1) One EVM Chain that has etherscan grade block explorer
 2) USDC
 
 The flow of the Red Packet POC system is as below:-
 ![This is an image](./plantuml/red_packet.png)
+

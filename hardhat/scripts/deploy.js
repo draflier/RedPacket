@@ -16,21 +16,28 @@ async function main() {
 
   // We get the contract to deploy
 
+
+  let addrToken = "0x2192a4ffcfe669e8fb65a571803c9da5d00c550b";
   const VaultFactory = await hre.ethers.getContractFactory("Vault");
-  const contractProfile = await VaultFactory.deploy();
 
-  await contractProfile.deployed();
+  const contractVault = await VaultFactory.deploy(addrToken);
+  await contractVault.deployed();
+
+  let intChainID = await web3.eth.getChainId();
 
 
-  console.log("Profile deployed to Binance Tesnet:", contractProfile.address);
+  console.log("Vault deployed to", contractVault.address);
+
   let contractAddressesMap = {
     url : hre.config.networks.binance_test.url,
-    admin_pk : hre.config.networks.drafsoln.accounts[0],
-    profile: contractProfile.address,
+    chain_id: intChainID,
+    vault_addr: contractVault.address,
 };
 
 let data = JSON.stringify(contractAddressesMap, null, 2);
 fs.writeFileSync('hardhat_cfg.json', data);
+
+
 }
 
 // We recommend this pattern to be able to use async/await everywhere

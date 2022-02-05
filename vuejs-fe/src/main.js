@@ -1,5 +1,9 @@
+/*
 import { createApp } from "vue";
 import { createWebHistory, createRouter } from "vue-router";
+//import {store} from "./store/index.js";
+import Toasted from 'vue-toasted';
+
 
 // views
 
@@ -28,4 +32,23 @@ const router = createRouter({
   routes,
 });
 
-createApp(App).use(router).mount("#app");
+
+
+createApp(App).use(router).use(Toasted).mount("#app");
+*/
+import "@fortawesome/fontawesome-free/css/all.min.css";
+
+import Vue from 'vue'
+import App from './App.vue'
+import store from "./store/index.js";
+import router from "./router.js";
+import Toasted from 'vue-toasted';
+
+Vue.use(Toasted);
+Vue.config.productionTip = false;
+
+new Vue({
+  router,
+  store,
+  render: h => h(App),
+}).$mount('#app');

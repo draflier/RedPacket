@@ -30,6 +30,8 @@ describe("Setting Up", function () {
 
   let intSleepSecs = 10000;
 
+  let strTxnFeeSmall = "300000000000000000";
+
   beforeEach(async function () {
 
   });
@@ -61,6 +63,15 @@ describe("Setting Up", function () {
       expect(testRes.toNumber()).to.equal(0);
     });
 
+    it("Setting Transaction Fee", async function () {
+      await hardhatVault.setTxnFeeSmall(strTxnFeeSmall);
+      await new Promise(r => setTimeout(r, intSleepSecs));
+      let result = await hardhatVault.getTxnFeeSmall();
+      let testRes = result.sub(strTxnFeeSmall);
+      expect(testRes.toNumber()).to.equal(0);
+    });
+
+
 
     it("User1 Deposit 1WBTC", async function () {
       intInitBalOwner = await hardhatWBTC.balanceOf(owner.address);
@@ -82,7 +93,7 @@ describe("Setting Up", function () {
     });
 
     it("Transaction Fee Processed", async function () {  
-      let testRes = intAfterBalOwner.sub(intInitBalOwner).sub("200000000000000000");
+      let testRes = intAfterBalOwner.sub(intInitBalOwner).sub(strTxnFeeSmall);
       expect(testRes.toNumber()).to.equal(0);
     });
 
@@ -98,7 +109,7 @@ describe("Setting Up", function () {
       await user2Vault.getRedPacket(strVaultKey);
       await new Promise(r => setTimeout(r, intSleepSecs));
       intAfterBalUser2 = await hardhatWBTC.balanceOf(user2.address); 
-      let testRes = intAfterBalUser2.sub(intInitBalUser2).sub("800000000000000000");
+      let testRes = intAfterBalUser2.sub(intInitBalUser2).sub("700000000000000000");
       expect(testRes.toNumber()).to.equal(0);
     });
 

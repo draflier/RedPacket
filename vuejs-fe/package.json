@@ -10,18 +10,27 @@
   "dependencies": {
     "@fortawesome/fontawesome-free": "5.15.3",
     "@popperjs/core": "2.9.1",
+    "authereum": "^0.1.14",
     "core-js": "3.9.1",
-    "vue": "3.0.7"
+    "ethers": "^5.5.4",
+    "qrcode.vue": "1.7.2",
+    "vue": "^2.6.11",
+    "vue-router": "^3.4.9",
+    "vue-template-compiler": "^2.6.14",
+    "vue-toasted": "^1.1.28",
+    "vuex": "^3.6.2",
+    "web3": "^1.7.0",
+    "web3modal": "^1.9.5"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "5.0.0-alpha.7",
-    "@vue/cli-plugin-eslint": "5.0.0-alpha.7",
-    "@vue/cli-service": "5.0.0-alpha.7",
+    "@vue/cli-plugin-babel": "~4.5.0",
+    "@vue/cli-plugin-eslint": "~4.5.0",
+    "@vue/cli-service": "~4.5.0",
     "@vue/compiler-sfc": "3.0.7",
     "babel-eslint": "10.1.0",
-    "eslint": "7.22.0",
-    "eslint-plugin-vue": "7.8.0",
-    "vue-router": "4.0.5"
+    "eslint": "^6.7.2",
+    "eslint-plugin-vue": "^6.2.2",
+    "vue-template-compiler": "^2.6.14"
   },
   "eslintConfig": {
     "root": true,
@@ -29,7 +38,7 @@
       "node": true
     },
     "extends": [
-      "plugin:vue/vue3-essential",
+      "plugin:vue/essential",
       "eslint:recommended"
     ],
     "parserOptions": {

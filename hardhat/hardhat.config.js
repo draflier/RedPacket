@@ -1,5 +1,7 @@
 require("@nomiclabs/hardhat-waffle");
 require("@nomiclabs/hardhat-ethers");
+require("@nomiclabs/hardhat-truffle5");
+require('dotenv').config();
 
 // This is a sample Hardhat task. To learn how to create your own go to
 // https://hardhat.org/guides/create-task.html
@@ -73,7 +75,7 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
       throwOnCallFailures: true,
       timeout: 1800000,
       allowUnlimitedContractSize: true,
-      accounts: ["a182030a6b1e20a5213b26c10d24cf1c9dcbb877b2a1dacb0e336161a0c9cd7c"]
+      accounts: ["119d17d02e7846ec8066fcbf2d2daaae4e774c892f4bfd5a58dc5288a93dce46"]
     },
     drafsoln: {
       url: "http://drafsoln.asuscomm.com:8545",
@@ -83,18 +85,8 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
       throwOnCallFailures: true,
       timeout: 1800000,
       allowUnlimitedContractSize: true,
-      accounts: ["a182030a6b1e20a5213b26c10d24cf1c9dcbb877b2a1dacb0e336161a0c9cd7c"]
+      accounts: ["119d17d02e7846ec8066fcbf2d2daaae4e774c892f4bfd5a58dc5288a93dce46"]
     },
-    // forms: {
-    //   url: "http://besu.formsdev.net/jsonrpc",
-    //   gas: 150000000,
-    //   blockGasLimit: 150000000,
-    //   throwOnTransactionFailures: true,
-    //   throwOnCallFailures: true,
-    //   timeout: 1800000,
-    //   allowUnlimitedContractSize: true,
-    //   accounts: ["ca6119e124c9498943f3ae09b2ca5c0b0f7bf72fb7438dabee01146d87542dc5"]
-    // },
     binance_test: {
       url: "https://data-seed-prebsc-2-s3.binance.org:8545/",
       gas: 30000000,
@@ -103,22 +95,10 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
       throwOnCallFailures: true,
       timeout: 1800000,
       allowUnlimitedContractSize: true,
-      accounts: ["a182030a6b1e20a5213b26c10d24cf1c9dcbb877b2a1dacb0e336161a0c9cd7c"]
+      accounts: ["119d17d02e7846ec8066fcbf2d2daaae4e774c892f4bfd5a58dc5288a93dce46",
+      "a182030a6b1e20a5213b26c10d24cf1c9dcbb877b2a1dacb0e336161a0c9cd7c",
+      "aa3d2a926277da2d595bf78324b1fd696e6709433e3dcd6a8946dbb509fcede4"]
     },
-    // moonbeam: {
-    //   url: "https://rpc.testnet.moonbeam.network",
-    //   gas: 1500000,
-    //   blockGasLimit: 15000000,
-    //   timeout: 1800000,
-    //   accounts: ["1bed892bdce369c62072e9dc6d5e6a3074dc7aec8039c8ef06c1c452197876af"]
-    // },
-    // matic: {
-    //   url: "https://matic-mumbai.chainstacklabs.com",
-    //   gas: 1500000,
-    //   blockGasLimit: 15000000,
-    //   timeout: 1800000,
-    //   accounts: ["1bed892bdce369c62072e9dc6d5e6a3074dc7aec8039c8ef06c1c452197876af"]
-    // },
   },
   paths: {
     sources: './contracts',

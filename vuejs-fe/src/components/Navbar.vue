@@ -23,7 +23,6 @@
       </div>
       <div
         class="lg:flex flex-grow items-center bg-white lg:bg-transparent lg:shadow-none"
-        v-bind:class="{'hidden': !showMenu, 'block': showMenu}"
       >
         <ul class="flex flex-col lg:flex-row list-none mr-auto">
           <li class="flex items-center">
@@ -39,16 +38,29 @@
         </ul>
 
 
+
         <ul class="flex flex-col lg:flex-row list-none lg:ml-auto">
           <li class="flex items-center">
             <button
               class="bg-white text-gray-800 active:bg-gray-100 text-xs font-bold uppercase px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none lg:mr-1 lg:mb-0 ml-3 mb-3"
               type="button"
               style="transition: all 0.15s ease 0s;"
+              v-bind:class="{'hidden': isUserConnected}"
+              v-on:click="connectWeb3Modal"
             >
               <i class="fas fa-solid fa-wallet"></i> Connect Wallet
             </button>
+            <button
+              class="bg-white text-gray-800 active:bg-gray-100 text-xs font-bold uppercase px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none lg:mr-1 lg:mb-0 ml-3 mb-3"
+              type="button"
+              style="transition: all 0.15s ease 0s;"
+              v-bind:class="{'hidden': !isUserConnected}"
+              v-on:click="disconnectWeb3Modal"
+            >
+              <i class="fas fa-solid fa-wallet"></i> Disconnect Wallet
+            </button>
           </li>
+
           <li class="flex items-center">
             <a
               class="lg:text-white lg:hover:text-gray-300 text-gray-800 px-3 py-4 lg:py-2 flex items-center text-xs uppercase font-bold"
@@ -85,16 +97,22 @@
   </nav>
 </template>
 <script>
+
+import { mapGetters,mapActions } from "vuex";
+
+
+
 export default {
-  data() {
-    return {
-      showMenu: false
-    }
+  computed: {
+    ...mapGetters("accounts", ["getChainName", "isUserConnected", "getActiveAccount"]),
+  },
+  created() {
+    this.$store.dispatch("accounts/initWeb3Modal");
+    this.$store.dispatch("accounts/ethereumListener");
   },
   methods: {
-    toggleNavbar: function(){
-      this.showMenu = !this.showMenu;
-    }
+
+    ...mapActions("accounts", ["connectWeb3Modal", "disconnectWeb3Modal"]),
   }
 }
 </script>

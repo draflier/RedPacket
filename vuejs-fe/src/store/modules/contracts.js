@@ -5,11 +5,14 @@ import {ethers} from "ethers";
 
 
 const state = {
-  strVaulKey:"hahahah",
+  strVaulKey:"",
+  strDepositedMsg: "",
   vaultAbi: null,
   vaultContract: null,
   IErc20Abi: null,
-  IErc20Contract: null
+  IErc20Contract: null,
+  isERC20Approved: false,
+  isDeposited: false,  
 };
 
 const getters = {
@@ -45,6 +48,15 @@ const getters = {
   },
   getIErc20Contract(state) {
     return state.IErc20Contract;
+  },
+  getDepositedMsg(state) {
+    return state.strDepositedMsg;
+  },
+  isERC20Approved(state) {
+    return state.isERC20Approved;
+  },
+  isDeposited(state) {
+    return state.isDeposited;
   }
 };
 
@@ -96,7 +108,19 @@ const actions = {
     let vaultAddress = addresses.vault_addr;
 
     commit("setVaultAddress", vaultAddress);
-  }
+  },
+  storeIsERC20Approved({commit})
+  {
+    commit("setIsERC20Approved", true);
+  },
+  storeIsDeposited({commit})
+  {
+    commit("setDeposited", true);
+  },
+  storeDepositedMsg({commit, strMsg})
+  {
+    commit("setDepositedMsg", strMsg);
+  },
 };
 
 const mutations = {
@@ -120,7 +144,17 @@ const mutations = {
   },
   setIErc20Contract(state, _contract) {
     state.IErc20Contract = _contract;
-  }
+  },
+  setIsERC20Approved(state, blnERC20Approved) {
+    state.isERC20Approved = blnERC20Approved;
+  },
+  setDeposited(state, blnDeposited) {
+    state.isDeposited = blnDeposited;
+  },
+  setDepositedMsg(state, strMsg)
+  {
+    state.strDepositedMsg = strMsg;
+  },
 };
 
 export default {

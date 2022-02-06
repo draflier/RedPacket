@@ -43,6 +43,7 @@
                         style="transition: all 0.15s ease 0s;"
                         name="approve"
                         v-on:click="approveToken"
+                        v-bind:class="{'hidden': isERC20Approved}"
                       >
                         Approve
                       </button>
@@ -53,10 +54,14 @@
                         style="transition: all 0.15s ease 0s;"
                         name="deposit"
                         v-on:click="depositToken"
+                        v-bind:class="{'hidden': (!isERC20Approved)}"
                       >
                         Deposit & Gen QR-Code
                       </button>
-                      <qrkey-component></qrkey-component>
+                      <div class="text-black-400 text-center mb-3 font-bold">
+                        <small v-bind:class="{'hidden': !isDeposited}">{{getDepositedMsg}}</small>
+                      </div>
+                      <qrkey-component v-bind:class="{'hidden': !isDeposited}"></qrkey-component>
                     </div>
                   </form>
                 </div>
@@ -83,7 +88,12 @@ export default {
   computed: 
   {
     ...mapGetters("accounts", ["getActiveAccount","getChainName", "isUserConnected","getChainInfoMsg"]),
-    ...mapGetters("contracts", ["getIErc20Contract","getVaultContract","getVaultKey"])
+    ...mapGetters("contracts", ["getIErc20Contract",
+                                "getVaultContract",
+                                "getVaultKey",
+                                "isERC20Approved",
+                                "isDeposited",
+                                "getDepositedMsg"])
   },
   methods:
   {
@@ -97,6 +107,7 @@ export default {
       let addrVault = await this.getVaultContract.address;
       
       await this.getIErc20Contract.approve(addrVault,numApproveAmt);
+      this.waitApprove(10,2, intAmt);
     },
     async depositToken() 
     {
@@ -106,26 +117,48 @@ export default {
       console.log("DEPOSITING ==> " + intAmt);    
       //await this.$store.dispatch("contracts/fetchVaultContract");
       await this.getVaultContract.deposit(numApproveAmt);
-      console.log("SLEEPING ==> " + 10000);  
-      await new Promise(r => setTimeout(r, 10000));
-      let strVaultKey = await this.getVaultContract.getVaultKey();
-      console.log(strVaultKey); 
-      await this.$store.dispatch("contracts/storeVaultKey",strVaultKey );
+      await this.waitDeposit(10, 2);
+      
+      
+      
     },
     
-    async isDeposited() 
+    async waitApprove(intIter, intIntervalsSecs, intDepositAmt) 
     {
-      console.log("Inside isDeposited");    
-      let strVaultKey = this.getVaultKey;
-      console.log(strVaultKey); 
-      if(strVaultKey == null)
+      console.log("Inside waitApprove => " + this.getActiveAccount + " " + this.getVaultContract.address);
+      for (let i = 0; i < intIter; i++)  
       {
-        return true;
-      }
-      else 
+        await new Promise(r => setTimeout(r, intIntervalsSecs * 1000));
+        let objAllowance = await this.getIErc20Contract.allowance(this.getActiveAccount ,this.getVaultContract.address);        
+        let intAllowance = ethers.utils.formatEther(objAllowance.toString());
+        if(intAllowance >= intDepositAmt)
+        {
+          await this.$store.dispatch("contracts/storeIsERC20Approved",true );
+        }
+      }    
+    },
+
+    async waitDeposit(intIter, intIntervalsSecs) 
+    {
+      console.log("Inside waitApprove => " + this.getActiveAccount + " " + this.getVaultContract.address);
+      let strVaultKey = "";
+      let strDomain = "https://draf-red-packet.netlify.app/redeem/"
+      for (let i = 0; i < intIter; i++)  
       {
-        return false;
+        await new Promise(r => setTimeout(r, intIntervalsSecs * 1000));
+        strVaultKey = await this.getVaultContract.getVaultKey();        
+        if(strVaultKey != "")
+        {
+          await this.$store.dispatch("contracts/storeVaultKey",strVaultKey );
+          await this.$store.dispatch("contracts/storeIsDeposited",true );
+          let strMsg = "You have created Red Packet:\n "
+                       + strVaultKey + 
+                       "\n Feel free to redeem the Red Packet the following LINK:\n"
+                       + strDomain + strVaultKey;
+          await this.$store.dispatch("contracts/storeDepositedMsg",strMsg);
+        }
       }
+      console.log(strVaultKey);     
     }
     
   },

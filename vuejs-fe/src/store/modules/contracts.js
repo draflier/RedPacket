@@ -1,6 +1,6 @@
-import Vault from "../../../../hardhat/artifacts/contracts/Vault.sol/Vault.json";
-import IErc20Token from "../../../../hardhat/artifacts/contracts/IERC20.sol/IERC20.json";
-import addresses from "../../../../hardhat/hardhat_cfg.json";
+import Vault from "../../artifacts/Vault.json";
+import IErc20Token from "../../artifacts/IERC20.json";
+import addresses from "../../artifacts/hardhat_cfg.json";
 import {ethers} from "ethers";
 
 

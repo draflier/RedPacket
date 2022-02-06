@@ -36,6 +36,9 @@ async function main() {
 
 let data = JSON.stringify(contractAddressesMap, null, 2);
 fs.writeFileSync('hardhat_cfg.json', data);
+fs.copyFileSync('./hardhat_cfg.json', '../vuejs-fe/src/artifacts/hardhat_cfg.json');
+fs.copyFileSync('./artifacts/contracts/IERC20.sol/IERC20.json', '../vuejs-fe/src/artifacts/IERC20.json');
+fs.copyFileSync('./artifacts/contracts/Vault.sol/Vault.json', '../vuejs-fe/src/artifacts/Vault.json');
 
 
 }

@@ -1,3 +1,2 @@
 # Redirects from what the browser requests to what we serve
-/redeem              /redeem
-/deposit            /deposit
+/*      /index.html 200

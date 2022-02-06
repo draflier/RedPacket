@@ -59,7 +59,7 @@
                         Deposit & Gen QR-Code
                       </button>
                       <div class="text-black-400 text-center mb-3 font-bold">
-                        <small v-bind:class="{'hidden': !isDeposited}">{{getDepositedMsg}}</small>
+                        <small>{{getDepositedMsg}}</small>
                       </div>
                       <qrkey-component v-bind:class="{'hidden': !isDeposited}"></qrkey-component>
                     </div>

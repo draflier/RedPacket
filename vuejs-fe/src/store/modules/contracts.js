@@ -117,8 +117,9 @@ const actions = {
   {
     commit("setDeposited", true);
   },
-  storeDepositedMsg({commit, strMsg})
+  async storeDepositedMsg({commit}, strMsg)
   {
+    console.log("strMsg2 ==> " + strMsg)
     commit("setDepositedMsg", strMsg);
   },
 };

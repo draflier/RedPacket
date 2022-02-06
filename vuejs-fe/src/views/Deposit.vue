@@ -59,7 +59,7 @@
                         Deposit & Gen QR-Code
                       </button>
                       <div class="text-black-400 text-center mb-3 font-bold">
-                        <small>{{getDepositedMsg}}</small>
+                        <small white-space: pre-wrap>{{getDepositedMsg}}</small>
                       </div>
                       <qrkey-component v-bind:class="{'hidden': !isDeposited}"></qrkey-component>
                     </div>
@@ -134,6 +134,7 @@ export default {
         if(intAllowance >= intDepositAmt)
         {
           await this.$store.dispatch("contracts/storeIsERC20Approved",true );
+          return;
         }
       }    
     },
@@ -149,13 +150,15 @@ export default {
         strVaultKey = await this.getVaultContract.getVaultKey();        
         if(strVaultKey != "")
         {
-          await this.$store.dispatch("contracts/storeVaultKey",strVaultKey );
+          await this.$store.dispatch("contracts/storeVaultKey",strDomain + strVaultKey );
           await this.$store.dispatch("contracts/storeIsDeposited",true );
-          let strMsg = "You have created Red Packet:\n "
+          let strMsg = "You have created Red Packet: \n"
                        + strVaultKey + 
                        "\n Feel free to redeem the Red Packet the following LINK:\n"
-                       + strDomain + strVaultKey;
+                       + strDomain + strVaultKey;                      
+          console.log("strMsg ==> " + strMsg)
           await this.$store.dispatch("contracts/storeDepositedMsg",strMsg);
+          return;
         }
       }
       console.log(strVaultKey);     

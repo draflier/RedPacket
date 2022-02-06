@@ -31,7 +31,7 @@
                       ><input
                         type="text"
                         class="border-0 px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full"
-                        placeholder=""
+                        :value="this.$route.params.vaultKey"
                         style="transition: all 0.15s ease 0s;"
                         ref="redemptionCode"
                       />
@@ -78,10 +78,11 @@ export default {
     async redeemFund() 
     {
       console.log("Inside Redeem Fund");
-      let strRedemption = this.$refs.redemptionCode.value;
-      console.log("Redeeming ==> " + strRedemption);    
+      let strRedemptionCode = this.$route.params.vaultKey
+      await this.$store.dispatch("contracts/fetchVaultContract");
+      console.log("Redeeming ==> " + strRedemptionCode);    
       
-      await this.getVaultContract.getRedPacket(strRedemption);
+      await this.getVaultContract.getRedPacket(strRedemptionCode);
       console.log("SLEEPING ==> " + 10000);  
       await new Promise(r => setTimeout(r, 10000));
     },

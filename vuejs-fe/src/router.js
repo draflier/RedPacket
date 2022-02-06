@@ -16,11 +16,7 @@ export default new Router({
           component: Deposit,
         },
         {
-            path: "/redeem/",
-            component: Redeem,
-        },
-        {
-            path: "/redeem/:vaultKey",
+            path: "/redeem/:vaultKey?",
             component: Redeem,
         },
         { path: "/:pathMatch(.*)*", redirect: "/deposit" },

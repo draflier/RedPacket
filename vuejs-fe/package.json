@@ -13,7 +13,7 @@
     "authereum": "^0.1.14",
     "core-js": "3.9.1",
     "ethers": "^5.5.4",
-    "qrcode.vue": "1.7.2",
+    "qrcode.vue": "1.7.0",
     "vue": "^2.6.11",
     "vue-router": "^3.4.9",
     "vue-template-compiler": "^2.6.14",

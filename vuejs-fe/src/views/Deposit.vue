@@ -34,6 +34,7 @@
                         placeholder="Deposit Amount"
                         style="transition: all 0.15s ease 0s;"
                         ref="depositAmt"
+                        v-bind:class="{'disabled': isLoading}"
                       />
                     </div>
                     <div class="text-center mt-6">
@@ -43,9 +44,18 @@
                         style="transition: all 0.15s ease 0s;"
                         name="approve"
                         v-on:click="approveToken"
-                        v-bind:class="{'hidden': isERC20Approved}"
+                        v-bind:class="{'hidden': isLoading || (!isLoading && isERC20Approved)}"
                       >
                         Approve
+                      </button>
+                      <button
+                        class="bg-gray-900 text-white active:bg-gray-700 text-sm font-bold px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full"
+                        type="button"
+                        style="transition: all 0.15s ease 0s;"
+                        name="loading"
+                        v-bind:class="{'hidden': !isLoading}"
+                      >
+                        Loading...
                       </button>
 
                       <button
@@ -54,7 +64,7 @@
                         style="transition: all 0.15s ease 0s;"
                         name="deposit"
                         v-on:click="depositToken"
-                        v-bind:class="{'hidden': (!isERC20Approved)}"
+                        v-bind:class="{'hidden': isLoading || isDeposited || (!isERC20Approved )}"
                       >
                         Deposit & Gen QR-Code
                       </button>
@@ -93,7 +103,8 @@ export default {
                                 "getVaultKey",
                                 "isERC20Approved",
                                 "isDeposited",
-                                "getDepositedMsg"])
+                                "getDepositedMsg",
+                                "isLoading"])
   },
   methods:
   {
@@ -115,7 +126,6 @@ export default {
       let intAmt = this.$refs.depositAmt.value;
       let numApproveAmt = ethers.utils.parseEther(intAmt);  
       console.log("DEPOSITING ==> " + intAmt);    
-      //await this.$store.dispatch("contracts/fetchVaultContract");
       await this.getVaultContract.deposit(numApproveAmt);
       await this.waitDeposit(10, 2);
       
@@ -125,6 +135,7 @@ export default {
     
     async waitApprove(intIter, intIntervalsSecs, intDepositAmt) 
     {
+      await this.$store.dispatch("contracts/storeIsLoading",true );
       console.log("Inside waitApprove => " + this.getActiveAccount + " " + this.getVaultContract.address);
       for (let i = 0; i < intIter; i++)  
       {
@@ -134,6 +145,7 @@ export default {
         if(intAllowance >= intDepositAmt)
         {
           await this.$store.dispatch("contracts/storeIsERC20Approved",true );
+          await this.$store.dispatch("contracts/storeIsLoading",false );
           return;
         }
       }    
@@ -141,6 +153,7 @@ export default {
 
     async waitDeposit(intIter, intIntervalsSecs) 
     {
+      await this.$store.dispatch("contracts/storeIsLoading",true );
       console.log("Inside waitApprove => " + this.getActiveAccount + " " + this.getVaultContract.address);
       let strVaultKey = "";
       let strDomain = "https://draf-red-packet.netlify.app/redeem/"
@@ -158,6 +171,7 @@ export default {
                        + strDomain + strVaultKey;                      
           console.log("strMsg ==> " + strMsg)
           await this.$store.dispatch("contracts/storeDepositedMsg",strMsg);
+          await this.$store.dispatch("contracts/storeIsLoading",false );
           return;
         }
       }

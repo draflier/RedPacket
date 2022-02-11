@@ -1,5 +1,6 @@
 <template>
   <div>
+    
     <navbar-component></navbar-component>
     <main>
       <section class="absolute w-full h-full">
@@ -63,6 +64,7 @@
 <script>
 import NavbarComponent from "../components/Navbar.vue";
 import FooterComponent from "../components/Footer.vue";
+import {ethers} from "ethers"
 import { mapGetters } from "vuex";
 
 
@@ -71,20 +73,37 @@ export default {
   computed: 
   {
     ...mapGetters("accounts", ["getActiveAccount","getChainName", "isUserConnected","getChainInfoMsg"]),
-    ...mapGetters("contracts", ["getIErc20Contract","getVaultContract","getVaultKey"])
+    ...mapGetters("contracts", ["getIErc20Contract","getVaultContract","getVaultKey","isLoading"])
   },
   methods:
   {
     async redeemFund() 
     {
       console.log("Inside Redeem Fund");
-      let strRedemptionCode = this.$route.params.vaultKey
+      let strRedemptionCode = this.$refs.redemptionCode.value;
       await this.$store.dispatch("contracts/fetchVaultContract");
       console.log("Redeeming ==> " + strRedemptionCode);    
-      
+      let objCurrBalance = await this.getIErc20Contract.balanceOf(this.getActiveAccount); 
       await this.getVaultContract.getRedPacket(strRedemptionCode);
-      console.log("SLEEPING ==> " + 10000);  
-      await new Promise(r => setTimeout(r, 10000));
+      await this.waitRedeem(10,2,objCurrBalance);
+    },
+    async waitRedeem(intIter, intIntervalsSecs, intInitialBalance) 
+    {
+      await this.$store.dispatch("contracts/storeIsLoading",true );
+      console.log("Inside waitRedeem => " + this.getActiveAccount + " " + this.getVaultContract.address);
+      for (let i = 0; i < intIter; i++)  
+      {
+        await new Promise(r => setTimeout(r, intIntervalsSecs * 1000));
+        let objCurrBalance = await this.getIErc20Contract.balanceOf(this.getActiveAccount);        
+        let intInitialBal = ethers.utils.formatEther(intInitialBalance.toString());
+        let intCurrBal = ethers.utils.formatEther(objCurrBalance.toString());
+        if(intCurrBal - intInitialBal > 0)
+        {
+          await this.$store.dispatch("contracts/storeIsRedeemed",true );
+          await this.$store.dispatch("contracts/storeIsLoading",false );
+          return;
+        }
+      }    
     },
     
   },

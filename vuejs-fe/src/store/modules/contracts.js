@@ -13,6 +13,8 @@ const state = {
   IErc20Contract: null,
   isERC20Approved: false,
   isDeposited: false,  
+  isLoading: false,  
+  isRedeemed: false,  
 };
 
 const getters = {
@@ -57,7 +59,13 @@ const getters = {
   },
   isDeposited(state) {
     return state.isDeposited;
-  }
+  },
+  isLoading(state) {
+    return state.isLoading;
+  },
+  isRedeemed(state) {
+    return state.isRedeemed;
+  },
 };
 
 const actions = {
@@ -119,8 +127,15 @@ const actions = {
   },
   async storeDepositedMsg({commit}, strMsg)
   {
-    console.log("strMsg2 ==> " + strMsg)
     commit("setDepositedMsg", strMsg);
+  },
+  async storeIsLoading({commit}, blnLoading)
+  {
+    commit("setIsLoading", blnLoading);
+  },
+  async storeIsRedeemed({commit}, blnRedeemed)
+  {
+    commit("setIsRedeemed", blnRedeemed);
   },
 };
 
@@ -155,6 +170,14 @@ const mutations = {
   setDepositedMsg(state, strMsg)
   {
     state.strDepositedMsg = strMsg;
+  },
+  setIsLoading(state,blnLoading)
+  {
+    state.isLoading = blnLoading;
+  },
+  setIsRedeemed(state,blnRedeemed)
+  {
+    state.isRedeemed = blnRedeemed;
   },
 };
 

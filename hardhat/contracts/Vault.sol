@@ -23,6 +23,7 @@ contract Vault is ReentrancyGuard, Ownable{
     mapping (string => uint256) redPacketVaultsAmt;
     mapping (string => uint256) redPacketVaultsBlkNo;
     mapping (address => string) redPacketLatest;
+    //mapping (address => bool) redPacketLatestLock;
 
 
     constructor(address addrToken)  {
@@ -72,11 +73,14 @@ contract Vault is ReentrancyGuard, Ownable{
         IERC20(m_addrToken).transferFrom(msg.sender, address(this), intTxnAmt);
         redPacketVaultsAmt[strKeyVault] = intTxnAmt;
         redPacketLatest[msg.sender] = strKeyVault;
+        //redPacketLatestLock[msg.sender] = true;
     }
 
     function getVaultKey() public view returns(string memory)
     {
-        //require(redPacketLatest[msg.sender] != 0);
+        require(redPacketVaultsAmt[redPacketLatest[msg.sender]] != 0);
+        //require(redPacketLatestLock[msg.sender] == true);
+        //redPacketLatestLock[msg.sender] = false;
         return redPacketLatest[msg.sender];
     }
 

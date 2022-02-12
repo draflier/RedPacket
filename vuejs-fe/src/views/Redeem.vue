@@ -35,6 +35,7 @@
                         :value="this.$route.params.vaultKey"
                         style="transition: all 0.15s ease 0s;"
                         ref="redemptionCode"
+                        :disabled=isInputDisabled()
                       />
                     </div>
                     <div class="text-center mt-6">
@@ -45,8 +46,29 @@
                         style="transition: all 0.15s ease 0s;"
                         name="redeemFund"
                         v-on:click="redeemFund"
+                        v-bind:class="{'hidden': isLoading || isRedeemed}"
                       >
                         Redeem Red Packet
+                      </button>
+
+                      <button
+                        class="bg-gray-900 text-white active:bg-gray-700 text-sm font-bold px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full"
+                        type="button"
+                        style="transition: all 0.15s ease 0s;"
+                        name="loading"
+                        v-bind:class="{'hidden': !isLoading}"
+                      >
+                        Loading...
+                      </button>
+
+                      <button
+                        class="bg-gray-900 text-white active:bg-gray-700 text-sm font-bold px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full"
+                        type="button"
+                        style="transition: all 0.15s ease 0s;"
+                        name="redeemFund"
+                        v-bind:class="{'hidden': !isRedeemed}"
+                      >
+                        Red Packet Redeemed
                       </button>
                     </div>
                   </form>
@@ -72,8 +94,8 @@ export default {
   name: "deposit-page",
   computed: 
   {
-    ...mapGetters("accounts", ["getActiveAccount","getChainName", "isUserConnected","getChainInfoMsg"]),
-    ...mapGetters("contracts", ["getIErc20Contract","getVaultContract","getVaultKey","isLoading"])
+    ...mapGetters("accounts", ["getActiveAccount","getChainName", "isUserConnected","getChainInfoMsg","getEthers"]),
+    ...mapGetters("contracts", ["getIErc20Contract","getVaultContract","getVaultKey","isLoading","isRedeemed"])
   },
   methods:
   {
@@ -82,30 +104,22 @@ export default {
       console.log("Inside Redeem Fund");
       let strRedemptionCode = this.$refs.redemptionCode.value;
       await this.$store.dispatch("contracts/fetchVaultContract");
-      await this.$store.dispatch("contracts/fetchIErc20Contract");
-      console.log("Redeeming ==> " + strRedemptionCode);    
-      let objCurrBalance = await this.getIErc20Contract.balanceOf(this.getActiveAccount); 
-      await this.getVaultContract.getRedPacket(strRedemptionCode);
-      await this.waitRedeem(10,2,objCurrBalance);
-    },
-    async waitRedeem(intIter, intIntervalsSecs, intInitialBalance) 
-    {
+      //await this.$store.dispatch("contracts/fetchIErc20Contract");
+      //console.log("Redeeming ==> " + strRedemptionCode);    
+      //let objCurrBalance = await this.getIErc20Contract.balanceOf(this.getActiveAccount); 
       await this.$store.dispatch("contracts/storeIsLoading",true );
-      console.log("Inside waitRedeem => " + this.getActiveAccount + " " + this.getVaultContract.address);
-      for (let i = 0; i < intIter; i++)  
-      {
-        await new Promise(r => setTimeout(r, intIntervalsSecs * 1000));
-        let objCurrBalance = await this.getIErc20Contract.balanceOf(this.getActiveAccount);        
-        let intInitialBal = ethers.utils.formatEther(intInitialBalance.toString());
-        let intCurrBal = ethers.utils.formatEther(objCurrBalance.toString());
-        if(intCurrBal - intInitialBal > 0)
-        {
-          await this.$store.dispatch("contracts/storeIsRedeemed",true );
-          await this.$store.dispatch("contracts/storeIsLoading",false );
-          return;
-        }
-      }    
+      let objTxn = await this.getVaultContract.getRedPacket(strRedemptionCode);
+      await this.getEthers.waitForTransaction(objTxn.hash,3);
+      
+
+      await this.$store.dispatch("contracts/storeIsRedeemed",true );
+      await this.$store.dispatch("contracts/storeIsLoading",false );
+      
     },
+    isInputDisabled()
+    {
+      return this.isLoading || this.isRedeemed;
+    }
     
   },
   components: 

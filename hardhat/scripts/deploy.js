@@ -18,9 +18,10 @@ async function main() {
 
 
   let addrToken = "0x2192a4ffcfe669e8fb65a571803c9da5d00c550b";
+  console.log("Deploying Vault contract");
   const VaultFactory = await hre.ethers.getContractFactory("Vault");
 
-  const contractVault = await VaultFactory.deploy(addrToken);
+  const contractVault = await VaultFactory.deploy(addrToken,{ gasLimit: 5000000 });
   await contractVault.deployed();
 
   let intChainID = await web3.eth.getChainId();

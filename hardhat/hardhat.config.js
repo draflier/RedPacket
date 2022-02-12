@@ -88,7 +88,7 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
       accounts: ["119d17d02e7846ec8066fcbf2d2daaae4e774c892f4bfd5a58dc5288a93dce46"]
     },
     binance_test: {
-      url: "https://data-seed-prebsc-2-s3.binance.org:8545/",
+      url: "https://data-seed-prebsc-1-s1.binance.org:8545/",
       gas: 30000000,
       blockGasLimit: 150000000,
       throwOnTransactionFailures: true,

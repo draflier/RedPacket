@@ -28,8 +28,6 @@ describe("Setting Up", function () {
 
   let strVaultKey;
 
-  let intSleepSecs = 10000;
-
   beforeEach(async function () {
 
   });
@@ -53,8 +51,9 @@ describe("Setting Up", function () {
       console.log("Vault Address => " + hardhatVault.address);
       user1WBTC = await hardhatWBTC.connect(user1);
       console.log("User 1 WBTC Address => " + user1WBTC.address);
-      await user1WBTC.approve(hardhatVault.address,"1000000000000000000");
-      await new Promise(r => setTimeout(r, intSleepSecs));
+      let objTxn = await user1WBTC.approve(hardhatVault.address,"1000000000000000000");
+      await ethers.provider.waitForTransaction(objTxn.hash,3);
+
       let result = await user1WBTC.allowance(user1.address, hardhatVault.address);
       console.log(result.toString());
       let testRes = result.sub("1000000000000000000")
@@ -67,13 +66,10 @@ describe("Setting Up", function () {
       intInitBalUser1 = await hardhatWBTC.balanceOf(user1.address);
       intInitBalUser2 = await hardhatWBTC.balanceOf(user2.address);
       user1Vault = await hardhatVault.connect(user1);
-      //user1Vault = await ethers.getContractAt(VaultArtifact.abi,hardhatVault.address,user1);
-      //user1Vault = factoryVault.attach(hardhatVault.address,user1);
-      //user1Vault = await factoryVault.connect(user1);
       console.log("User 1 Vault Address => " + user1Vault.address);
-      await user1Vault.deposit("1000000000000000000");
+      let objTxn = await user1Vault.deposit("1000000000000000000");
+      await ethers.provider.waitForTransaction(objTxn.hash,3);
 
-      await new Promise(r => setTimeout(r, intSleepSecs));
       intAfterBalOwner = await hardhatWBTC.balanceOf(owner.address);
       intAfterBalUser1 = await hardhatWBTC.balanceOf(user1.address);
      
@@ -95,8 +91,9 @@ describe("Setting Up", function () {
 
     it("Retrieve", async function () {  
       user2Vault = await hardhatVault.connect(user2);
-      await user2Vault.getRedPacket(strVaultKey);
-      await new Promise(r => setTimeout(r, intSleepSecs));
+      let objTxn = await user2Vault.getRedPacket(strVaultKey);
+      await ethers.provider.waitForTransaction(objTxn.hash,3);
+
       intAfterBalUser2 = await hardhatWBTC.balanceOf(user2.address); 
       let testRes = intAfterBalUser2.sub(intInitBalUser2).sub("800000000000000000");
       expect(testRes.toNumber()).to.equal(0);

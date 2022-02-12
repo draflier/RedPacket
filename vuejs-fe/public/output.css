@@ -450,6 +450,10 @@ textarea::placeholder {
   color: #a1a1aa;
 }
 
+input[type="text"]:disabled {
+  background: #ccc;
+}
+
 button,
 [role="button"] {
   cursor: pointer;

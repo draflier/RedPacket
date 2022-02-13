@@ -82,7 +82,7 @@ import { mapGetters,mapActions } from "vuex";
 
 export default {
   computed: {
-    ...mapGetters("accounts", ["getChainName", "isUserConnected", "getActiveAccount"]),
+    ...mapGetters("accounts", ["getChainName", "isUserConnected", "isCorrectChain", "getActiveAccount"]),
   },
   created() {
     this.$store.dispatch("accounts/initWeb3Modal");

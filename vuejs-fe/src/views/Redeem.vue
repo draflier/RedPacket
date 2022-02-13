@@ -46,7 +46,7 @@
                         style="transition: all 0.15s ease 0s;"
                         name="redeemFund"
                         v-on:click="redeemFund"
-                        v-bind:class="{'hidden': isLoading || isRedeemed}"
+                        v-bind:class="{'hidden': (!isUserConnected || !isCorrectChain) || (isLoading || isRedeemed)}"
                       >
                         Redeem Red Packet
                       </button>
@@ -56,7 +56,7 @@
                         type="button"
                         style="transition: all 0.15s ease 0s;"
                         name="loading"
-                        v-bind:class="{'hidden': !isLoading}"
+                        v-bind:class="{'hidden': (!isUserConnected || !isCorrectChain) || !isLoading}"
                       >
                         Loading...
                       </button>
@@ -66,7 +66,7 @@
                         type="button"
                         style="transition: all 0.15s ease 0s;"
                         name="redeemFund"
-                        v-bind:class="{'hidden': !isRedeemed}"
+                        v-bind:class="{'hidden': (!isUserConnected || !isCorrectChain) || !isRedeemed}"
                       >
                         Red Packet Redeemed
                       </button>
@@ -92,7 +92,12 @@ export default {
   name: "deposit-page",
   computed: 
   {
-    ...mapGetters("accounts", ["getActiveAccount","getChainName", "isUserConnected","getChainInfoMsg","getEthers"]),
+    ...mapGetters("accounts", ["getActiveAccount",
+                                "getChainName", 
+                                "isUserConnected",
+                                "isCorrectChain",
+                                "getChainInfoMsg",
+                                "getEthers"]),
     ...mapGetters("contracts", ["getIErc20Contract","getVaultContract","getVaultKey","isLoading","isRedeemed"])
   },
   methods:

@@ -1,17 +1,21 @@
 import Web3Modal from "web3modal";
 //import Web3 from "web3";
 import {ethers} from "ethers";
+import hardhatCfg from "../../artifacts/hardhat_cfg.json";
+import 'core-js/es/array';
 
 const state = {
   activeAccount: null,
   activeBalance: 0,
   chainId: null,
   chainName: null,
-  chainInfoMsg: "Please connect your EVM Web3 Wallet",
+  chainInfoMsg: "Please connect your Wallet to " + resolveChainName("0x" + hardhatCfg.chain_id.toString(16)),
   provider: null,
   isConnected: false,
+  isCorrectChain: false,
   providerW3m: null, // this is "provider" from Web3Modal
-  web3Modal: null
+  web3Modal: null,
+  supportedChainId: hardhatCfg.chain_id
 };
 
 const getters = {
@@ -34,6 +38,12 @@ const getters = {
   getChainName(state) {
     return state.chainName;
   },
+  getSupportedChainId(state) {
+    return state.supportedChainId;
+  },
+  getSupportedChainName(state) {
+    return resolveChainName(state.supportedChainId);
+  },
   getChainInfoMsg(state) {
     return state.chainInfoMsg;
   },
@@ -49,6 +59,36 @@ const getters = {
   },
   isUserConnected(state) {
     return state.isConnected;
+    /*
+    let strSupportedChainId = "0x" + hardhatCfg.chain_id.toString(16)
+    console.log("state.isConnected => " + state.isConnected);
+    console.log("state.chainId => " + state.chainId);
+    console.log("strSupportedChainId ==> "+ strSupportedChainId);
+    if (state.isConnected == true && (state.chainId == strSupportedChainId))
+    {
+      return true;
+    } 
+    else
+    {
+      return false;
+    }
+    */
+  },
+  isCorrectChain(state){
+    return state.isCorrectChain;
+    /*
+    let strSupportedChainId = "0x" + hardhatCfg.chain_id.toString(16)
+    console.log("window.ethereum.chainId => " + window.ethereum.chainId);
+    console.log("strSupportedChainId ==> "+ strSupportedChainId);
+    if (window.ethereum.chainId == strSupportedChainId)
+    {
+      return true;
+    }
+    else
+    {
+      return false;
+    }
+    */
   }
 };
 
@@ -76,8 +116,11 @@ const actions = {
       commit("setActiveAccount", window.ethereum.selectedAddress);
       commit("setChainData", window.ethereum.chainId);
       commit("setWeb3Provider", providerW3m);
-      let strMsg = "You are currently connected. \n" + window.ethereum.selectedAddress + "\n (" + resolveChainName(window.ethereum.chainId) + ")";
+      let strMsg = "";
+      let blnCorrectChain = false;
+      [strMsg,blnCorrectChain]   = parseWelcomeMsg(window.ethereum.selectedAddress, window.ethereum.chainId);
       actions.storeChainInfoMsg({commit, strMsg});
+      actions.storeCorrectChainStatus({commit, blnCorrectChain});
     }
 
     commit("setWeb3ModalInstance", w3mObject);
@@ -93,8 +136,11 @@ const actions = {
     commit("setWeb3Provider", providerW3m);
     //actions.getChainId(commit);
     //actions.storeChainInfoMsg(commit, strMsg);
-    let strMsg = "You are currently connected. \n" + window.ethereum.selectedAddress + "\n (" + resolveChainName(window.ethereum.chainId) + ")";
+    let strMsg = "";
+    let blnCorrectChain = false;
+    [strMsg,blnCorrectChain]   = parseWelcomeMsg(window.ethereum.selectedAddress, window.ethereum.chainId);
     actions.storeChainInfoMsg({commit, strMsg});
+    actions.storeCorrectChainStatus({commit, blnCorrectChain});
 
   },
 
@@ -111,16 +157,23 @@ const actions = {
       if (state.isConnected) {
         commit("setActiveAccount", accounts[0]);
         commit("setWeb3Provider", state.providerW3m);
-        let strMsg = "You are currently connected. \n" + window.ethereum.selectedAddress + "\n (" + resolveChainName(window.ethereum.chainId) + ")";
-    actions.storeChainInfoMsg({commit, strMsg});
+        let strMsg = "";
+        let blnCorrectChain = false;
+        [strMsg,blnCorrectChain] = parseWelcomeMsg(window.ethereum.selectedAddress, window.ethereum.chainId);
+        actions.storeChainInfoMsg({commit, strMsg});
+        actions.storeCorrectChainStatus({commit, blnCorrectChain});
       }
     });
 
     window.ethereum.on('chainChanged', (chainId) => {
       commit("setChainData", chainId);
       commit("setWeb3Provider", state.providerW3m);
-      let strMsg = "You are currently connected. \n" + window.ethereum.selectedAddress + "\n (" + resolveChainName(window.ethereum.chainId) + ")";
-    actions.storeChainInfoMsg({commit, strMsg});
+      let strMsg = "";
+      let blnCorrectChain = false;
+      [strMsg,blnCorrectChain]  = parseWelcomeMsg(window.ethereum.selectedAddress, chainId);
+
+      actions.storeChainInfoMsg({commit, strMsg});
+      actions.storeCorrectChainStatus({commit, blnCorrectChain});
     });
 
   },
@@ -133,6 +186,11 @@ const actions = {
   async storeChainInfoMsg({ commit, strMsg } ) {
     console.log("strMsg => "+ strMsg);
     commit("setChainInfoMsg", strMsg);
+  },
+
+  async storeCorrectChainStatus({ commit, blnCorrectChain } ) {
+    console.log("blnCorrectChain => "+ blnCorrectChain);
+    commit("setIsCorrectChain", blnCorrectChain);
   }
   
 };
@@ -186,6 +244,12 @@ const mutations = {
     localStorage.setItem('isConnected', isConnected);
   },
 
+  setIsCorrectChain(state, blnCorrectChain) {
+    state.isCorrectChain = blnCorrectChain;
+    // add to persistent storage so that the user can be logged back in when revisiting website
+    //localStorage.setItem('isCorrectChain', isCorrectChain);
+  },
+
   setWeb3ModalInstance(state, w3mObject) {
     state.web3Modal = w3mObject;
   }
@@ -194,6 +258,7 @@ const mutations = {
 
 function resolveChainName(strChainID)
 {
+  console.log("strChainID +> " + strChainID);
   let strChainName;
   switch(strChainID) {
     case "0x1":
@@ -221,6 +286,26 @@ function resolveChainName(strChainID)
       break;
   }
   return strChainName;
+}
+
+function parseWelcomeMsg(strAccAddress, strChainId)
+{
+  let strMsg = ""
+  let blnCorrectChain = false;
+  let strSupportedChainId = "0x" + hardhatCfg.chain_id.toString(16)
+  console.log("strChainId => " + strChainId);
+  if (strChainId == strSupportedChainId)
+  {
+    strMsg = "You are currently connected. \n" + strAccAddress + "\n (" + resolveChainName(strChainId) + ")";
+    blnCorrectChain = true;
+  }
+  else
+  {
+    strMsg = "Currently not on the correct chain. Please connect to " + resolveChainName(strSupportedChainId) + "."
+    
+  }
+  return [strMsg,blnCorrectChain];
+
 }
 
 export default {

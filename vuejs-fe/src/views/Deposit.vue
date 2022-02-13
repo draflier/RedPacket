@@ -44,7 +44,7 @@
                         style="transition: all 0.15s ease 0s;"
                         name="approve"
                         v-on:click="approveToken"
-                        v-bind:class="{'hidden': isLoading || (!isLoading && isERC20Approved)}"
+                        v-bind:class="{'hidden': (!isUserConnected || !isCorrectChain) || (isLoading || (!isLoading && isERC20Approved))}"
                       >
                         Approve
                       </button>
@@ -53,7 +53,7 @@
                         type="button"
                         style="transition: all 0.15s ease 0s;"
                         name="loading"
-                        v-bind:class="{'hidden': !isLoading}"
+                        v-bind:class="{'hidden': (!isUserConnected || !isCorrectChain) || !isLoading}"
                       >
                         Loading...
                       </button>
@@ -64,7 +64,7 @@
                         style="transition: all 0.15s ease 0s;"
                         name="deposit"
                         v-on:click="depositToken"
-                        v-bind:class="{'hidden': isLoading || isDeposited || (!isERC20Approved )}"
+                        v-bind:class="{'hidden': (!isUserConnected || !isCorrectChain) || (isLoading || isDeposited || (!isERC20Approved ))}"
                       >
                         Deposit & Gen QR-Code
                       </button>
@@ -72,7 +72,7 @@
                         <small>{{getDepositedMsg}}</small>
                         <small-red>{{getRedeemURL}}</small-red>                        
                       </div>
-                      <qrkey-component v-bind:class="{'hidden': !isDeposited}"></qrkey-component>
+                      <qrkey-component v-bind:class="{'hidden': (!isUserConnected || !isCorrectChain) || !isDeposited}"></qrkey-component>
                     </div>
                   </form>
                 </div>
@@ -96,7 +96,12 @@ export default {
   name: "deposit-page",
   computed: 
   {
-    ...mapGetters("accounts", ["getActiveAccount","getChainName", "isUserConnected","getChainInfoMsg", "getEthers"]),
+    ...mapGetters("accounts", ["getActiveAccount",
+                                "getChainName", 
+                                "isUserConnected",
+                                "isCorrectChain",
+                                "getChainInfoMsg", 
+                                "getEthers"]),
     ...mapGetters("contracts", ["getIErc20Contract",
                                 "getVaultContract",
                                 "getVaultKey",

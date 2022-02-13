@@ -95,8 +95,8 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
       throwOnCallFailures: true,
       timeout: 1800000,
       allowUnlimitedContractSize: true,
-      accounts: ["119d17d02e7846ec8066fcbf2d2daaae4e774c892f4bfd5a58dc5288a93dce46",
-      "a182030a6b1e20a5213b26c10d24cf1c9dcbb877b2a1dacb0e336161a0c9cd7c",
+      accounts: ["a182030a6b1e20a5213b26c10d24cf1c9dcbb877b2a1dacb0e336161a0c9cd7c",
+      "119d17d02e7846ec8066fcbf2d2daaae4e774c892f4bfd5a58dc5288a93dce46",
       "aa3d2a926277da2d595bf78324b1fd696e6709433e3dcd6a8946dbb509fcede4"]
     },
   },

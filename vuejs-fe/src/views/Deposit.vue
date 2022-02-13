@@ -68,8 +68,9 @@
                       >
                         Deposit & Gen QR-Code
                       </button>
-                      <div class="text-black-400 text-center mb-3 font-bold">
-                        <small white-space: pre-wrap>{{getDepositedMsg}}</small>
+                      <div class="text-red-400 text-center mb-3 font-bold">
+                        <small>{{getDepositedMsg}}</small>
+                        <small-red>{{getRedeemURL}}</small-red>                        
                       </div>
                       <qrkey-component v-bind:class="{'hidden': !isDeposited}"></qrkey-component>
                     </div>
@@ -80,14 +81,12 @@
             </div>
           </div>
         </div>
-        <footer-component></footer-component>
       </section>
     </main>
   </div>
 </template>
 <script>
 import NavbarComponent from "../components/Navbar.vue";
-import FooterComponent from "../components/Footer.vue";
 import QrkeyComponent from "../components/Qrkey.vue";
 import {ethers} from "ethers";
 import { mapGetters } from "vuex";
@@ -101,6 +100,7 @@ export default {
     ...mapGetters("contracts", ["getIErc20Contract",
                                 "getVaultContract",
                                 "getVaultKey",
+                                "getRedeemURL",
                                 "isERC20Approved",
                                 "isDeposited",
                                 "getDepositedMsg",
@@ -108,6 +108,7 @@ export default {
   },
   methods:
   {
+
     async approveToken() 
     {
       console.log("Inside Approve Token");
@@ -130,11 +131,12 @@ export default {
       let intAmt = this.$refs.depositAmt.value;
       let numApproveAmt = ethers.utils.parseEther(intAmt);  
       console.log("DEPOSITING ==> " + intAmt);    
-      let objTxn = await this.getVaultContract.deposit(numApproveAmt);
       await this.$store.dispatch("contracts/storeIsLoading",true );
+      let objTxn = await this.getVaultContract.deposit(numApproveAmt);
+
       await this.getEthers.waitForTransaction(objTxn.hash,3);
       //await this.waitDeposit(200, 2);
-      await this.showRedeemCode()
+      await this.showDepositedMsg()
       
       
       
@@ -142,16 +144,16 @@ export default {
     
 
 
-    async showRedeemCode()
+    async showDepositedMsg()
     {
-      let strDomain = "https://draf-red-packet.netlify.app/redeem/"
+      let strDomain = "https://draf-red-packet-uat.netlify.app/redeem/";
       let strVaultKey = await this.getVaultContract.getVaultKey();  
-      await this.$store.dispatch("contracts/storeVaultKey",strDomain + strVaultKey );
+      await this.$store.dispatch("contracts/storeVaultKey", strVaultKey );
+      await this.$store.dispatch("contracts/storeRedeemURL", strDomain + strVaultKey );
       await this.$store.dispatch("contracts/storeIsDeposited",true );
       let strMsg = "You have created Red Packet: \n"
                    + strVaultKey + 
-                   "\n Feel free to redeem the Red Packet the following LINK:\n"
-                   + strDomain + strVaultKey;                      
+                   "\n Feel free to redeem the Red Packet the following LINK:\n";                     
       console.log("strMsg ==> " + strMsg)
       await this.$store.dispatch("contracts/storeDepositedMsg",strMsg);
       await this.$store.dispatch("contracts/storeIsLoading",false );
@@ -160,13 +162,12 @@ export default {
     isInputDisabled()
     {
       return this.isLoading || this.isERC20Approved;
-    }
+    },
     
   },
   components: 
   {
     NavbarComponent,
-    FooterComponent,
     QrkeyComponent,
   }
 }

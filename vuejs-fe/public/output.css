@@ -152,6 +152,12 @@ small {
   white-space: pre-wrap;
 }
 
+small-red {
+  font-size: 80%;
+  white-space: pre-wrap;
+  color: #8B0000;
+}
+
 /**
 Prevent 'sub' and 'sup' elements from affecting the line height in all browsers.
 */

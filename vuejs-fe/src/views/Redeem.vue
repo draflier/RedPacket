@@ -78,14 +78,12 @@
             </div>
           </div>
         </div>
-        <footer-component></footer-component>
       </section>
     </main>
   </div>
 </template>
 <script>
 import NavbarComponent from "../components/Navbar.vue";
-import FooterComponent from "../components/Footer.vue";
 
 import { mapGetters } from "vuex";
 
@@ -122,7 +120,6 @@ export default {
   components: 
   {
     NavbarComponent,
-    FooterComponent,
   }
 }
 </script>

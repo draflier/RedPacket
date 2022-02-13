@@ -24,18 +24,6 @@
       <div
         class="lg:flex flex-grow items-center bg-white lg:bg-transparent lg:shadow-none"
       >
-        <ul class="flex flex-col lg:flex-row list-none mr-auto">
-          <li class="flex items-center">
-            <a
-              class="lg:text-white lg:hover:text-gray-300 text-gray-800 px-3 py-4 lg:py-2 flex items-center text-xs uppercase font-bold"
-              href="https://www.creative-tim.com/learning-lab/tailwind-starter-kit#/login"
-              ><i
-                class="lg:text-gray-300 text-gray-500 far fa-file-alt text-lg leading-lg mr-2"
-              ></i>
-              Docs</a
-            >
-          </li>
-        </ul>
 
 
 
@@ -64,16 +52,6 @@
           <li class="flex items-center">
             <a
               class="lg:text-white lg:hover:text-gray-300 text-gray-800 px-3 py-4 lg:py-2 flex items-center text-xs uppercase font-bold"
-              href="#pablo"
-              ><i
-                class="lg:text-gray-300 text-gray-500 fab fa-facebook text-lg leading-lg "
-              ></i
-              ><span class="lg:hidden inline-block ml-2">Share</span></a
-            >
-          </li>
-          <li class="flex items-center">
-            <a
-              class="lg:text-white lg:hover:text-gray-300 text-gray-800 px-3 py-4 lg:py-2 flex items-center text-xs uppercase font-bold"
               href="https://twitter.com/draflier"
               ><i
                 class="lg:text-gray-300 text-gray-500 fab fa-twitter text-lg leading-lg "
@@ -84,7 +62,7 @@
           <li class="flex items-center">
             <a
               class="lg:text-white lg:hover:text-gray-300 text-gray-800 px-3 py-4 lg:py-2 flex items-center text-xs uppercase font-bold"
-              href="https://github.com/Draf-Solution/RedPacket"
+              href="https://github.com/Draf-Solution/RedPacket/tree/uat"
               ><i
                 class="lg:text-gray-300 text-gray-500 fab fa-github text-lg leading-lg "
               ></i

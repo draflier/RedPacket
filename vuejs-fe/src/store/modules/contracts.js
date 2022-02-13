@@ -6,6 +6,7 @@ import {ethers} from "ethers";
 
 const state = {
   strVaulKey:"",
+  strRedeemURL:"",
   strDepositedMsg: "",
   vaultAbi: null,
   vaultContract: null,
@@ -26,6 +27,9 @@ const getters = {
   },
   getVaultKey(state) {
     return state.strVaulKey;
+  },
+  getRedeemURL(state) {
+    return state.strRedeemURL;
   },
   getRetrieveAmt(state) {
     return state.intDepositAmt;
@@ -109,6 +113,9 @@ const actions = {
 
     commit("setVaultKey", strVaultKey);
   },
+  storeRedeemURL({commit}, strRedeemURL) {
+    commit("setRedeemURL", strRedeemURL);
+  },
   storeVaultAbi({commit}) {
     commit("setVaultAbi", Vault.abi);
   },
@@ -142,6 +149,9 @@ const actions = {
 const mutations = {
   setVaultKey(state, strVaultKey) {
     state.strVaulKey = strVaultKey;
+  },
+  setRedeemURL(state, strRedeemURL) {
+    state.strRedeemURL = strRedeemURL;
   },
   setVaultAbi(state, abi) {
     state.vaultAbi = abi;

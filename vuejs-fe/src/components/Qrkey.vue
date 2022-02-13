@@ -1,5 +1,5 @@
 <template>
-  <qrcode-vue :value="getVaultKey" :size="size" level="H" />
+  <qrcode-vue :value="getRedeemURL" :size="size" level="H" />
 </template>
 <script>
   import QrcodeVue from 'qrcode.vue'
@@ -12,7 +12,7 @@
       }
     },
     computed: {
-        ...mapGetters("contracts", ["getVaultKey"]),
+        ...mapGetters("contracts", ["getRedeemURL"]),
     },
     components: {
       QrcodeVue,

@@ -15,9 +15,9 @@ contract Vault is ReentrancyGuard, Ownable{
     address m_addrToken; 
     
 
-    uint256 m_intTxnFeeSmall = 200000000000000000;
+    uint256 m_intTxnFeeSmall = 200000;
     uint256 m_intTxnFeePct = 50;
-    uint256 m_intThreshold = 100000000000000000000;
+    uint256 m_intThreshold = 100000000;
     
 
     mapping (string => uint256) redPacketVaultsAmt;
@@ -48,7 +48,7 @@ contract Vault is ReentrancyGuard, Ownable{
         bool blnRes;
         uint256 intTxnAmt;
         uint256 intTxnFee;
-        (blnRes, intTxnAmt) = intAmt.trySub(100000000000000000000);
+        (blnRes, intTxnAmt) = intAmt.trySub(m_intThreshold);
         if (blnRes == false)
         {
             (blnRes, intTxnAmt) = intAmt.trySub(m_intTxnFeeSmall);

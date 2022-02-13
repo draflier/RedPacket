@@ -137,7 +137,7 @@ export default {
       let numApproveAmt = ethers.utils.parseEther(intAmt);  
       console.log("DEPOSITING ==> " + intAmt);    
       await this.$store.dispatch("contracts/storeIsLoading",true );
-      let objTxn = await this.getVaultContract.deposit(numApproveAmt);
+      let objTxn = await this.getVaultContract.deposit(numApproveAmt,{ gasLimit: 5000000 });
 
       await this.getEthers.waitForTransaction(objTxn.hash,3);
       //await this.waitDeposit(200, 2);

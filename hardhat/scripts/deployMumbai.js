@@ -17,7 +17,7 @@ async function main() {
   // We get the contract to deploy
 
 
-  let addrToken = "0x5bE0B2ebE7E7556F6242aA88BEc547A77E30DcB9";
+  let addrToken = "0x20364a85ECBcbA737a96C23eF321ef0B3AC834Bf";
   console.log("Deploying Vault contract");
   const VaultFactory = await hre.ethers.getContractFactory("Vault");
 
@@ -27,14 +27,14 @@ async function main() {
   let intChainID = await web3.eth.getChainId();
 
 
-  console.log("Vault deployed to", contractVault.address);
+  console.log("Vault deployed to", await contractVault.resolvedAddress);
   let strSupportTokenAddr = await contractVault.getSupportedToken();
   console.log("Supported Token => ", strSupportTokenAddr);
 
   let contractAddressesMap = {
     url : hre.config.networks.binance_test.url,
     chain_id: intChainID,
-    vault_addr: contractVault.address,
+    vault_addr: await contractVault.resolvedAddress,
 };
 
 let data = JSON.stringify(contractAddressesMap, null, 2);

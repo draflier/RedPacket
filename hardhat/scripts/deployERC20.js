@@ -17,11 +17,11 @@ async function main() {
   // We get the contract to deploy
 
   const [deployer] = await ethers.getSigners();
-  console.log("Deploying dUSDC contract");
+  console.log("Deploying ddUSDC contract");
   const Erc20 = await ethers.getContractFactory("ERC20");
-  const DusdcDeployed = await Erc20.deploy("Draf USDC", "dUSDC");
-  await DusdcDeployed.mint(deployer.address, ethers.BigNumber.from("8000000000000000000000"), { gasLimit: 5000000 }); // 8000 WBNB token
-  console.log("dUSDC deployed to:", DusdcDeployed.address);
+  const DusdcDeployed = await Erc20.deploy("Draf USDC", "ddUSDC");
+  await DusdcDeployed.mint(deployer.address, ethers.BigNumber.from("8000000000"), { gasLimit: 5000000 }); // 8000 WBNB token
+  console.log("ddUSDC deployed to:", DusdcDeployed.address);
 
 }
 

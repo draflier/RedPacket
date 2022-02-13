@@ -27,14 +27,14 @@ async function main() {
   let intChainID = await web3.eth.getChainId();
 
   
-  console.log("Vault deployed to", contractVault.address);
+  console.log("Vault deployed to", await contractVault.resolvedAddress);
   let strSupportTokenAddr = await contractVault.getSupportedToken();
   console.log("Supported Token => ", strSupportTokenAddr);
 
   let contractAddressesMap = {
     url : hre.config.networks.binance_test.url,
     chain_id: intChainID,
-    vault_addr: contractVault.address,
+    vault_addr: await contractVault.resolvedAddress,
 };
 
 let data = JSON.stringify(contractAddressesMap, null, 2);

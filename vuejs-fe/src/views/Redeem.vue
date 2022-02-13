@@ -86,7 +86,7 @@
 <script>
 import NavbarComponent from "../components/Navbar.vue";
 import FooterComponent from "../components/Footer.vue";
-import {ethers} from "ethers"
+
 import { mapGetters } from "vuex";
 
 

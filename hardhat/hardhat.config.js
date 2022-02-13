@@ -111,6 +111,13 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
       "119d17d02e7846ec8066fcbf2d2daaae4e774c892f4bfd5a58dc5288a93dce46",
       "aa3d2a926277da2d595bf78324b1fd696e6709433e3dcd6a8946dbb509fcede4"]
     },
+    polygon: {
+      url: "https://polygon-rpc.com/",
+      throwOnTransactionFailures: true,
+      throwOnCallFailures: true,
+      timeout: 1800000,
+      accounts: [""]
+    },
   },
   paths: {
     sources: './contracts',

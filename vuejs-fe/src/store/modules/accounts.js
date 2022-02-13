@@ -282,6 +282,9 @@ function resolveChainName(strChainID)
     case "0x13881":
       strChainName = "Mumbai Testnet";
       break;
+    case "0x89":
+      strChainName = "Polygon";
+      break;
     case "0x539": // 1337 (often used on localhost)
     case "0x1691": // 5777 (default in Ganache)
     default:

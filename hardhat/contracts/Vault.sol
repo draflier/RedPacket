@@ -25,6 +25,8 @@ contract Vault is ReentrancyGuard, Ownable{
     mapping (address => string) redPacketLatest;
     //mapping (address => bool) redPacketLatestLock;
 
+    event Deposit(address indexed _from, uint256 _value);
+
 
     constructor(address addrToken)  {
         m_addrToken = addrToken;
@@ -73,6 +75,7 @@ contract Vault is ReentrancyGuard, Ownable{
         IERC20(m_addrToken).transferFrom(msg.sender, address(this), intTxnAmt);
         redPacketVaultsAmt[strKeyVault] = intTxnAmt;
         redPacketLatest[msg.sender] = strKeyVault;
+        emit Deposit(msg.sender, intTxnAmt);
         //redPacketLatestLock[msg.sender] = true;
     }
 

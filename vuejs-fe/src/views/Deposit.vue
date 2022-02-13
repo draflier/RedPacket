@@ -118,7 +118,7 @@ export default {
     {
       console.log("Inside Approve Token");
       let intAmt = this.$refs.depositAmt.value;
-      let numApproveAmt = ethers.utils.parseEther(intAmt);
+      let numApproveAmt = ethers.utils.parseUnits(intAmt,6);
       await this.$store.dispatch("contracts/fetchVaultContract");
       await this.$store.dispatch("contracts/fetchIErc20Contract");
       let addrVault = await this.getVaultContract.address;
@@ -134,7 +134,7 @@ export default {
     {
       console.log("Inside Deposit Token");
       let intAmt = this.$refs.depositAmt.value;
-      let numApproveAmt = ethers.utils.parseEther(intAmt);  
+      let numApproveAmt = ethers.utils.parseEther(intAmt,6);  
       console.log("DEPOSITING ==> " + intAmt);    
       await this.$store.dispatch("contracts/storeIsLoading",true );
       let objTxn = await this.getVaultContract.deposit(numApproveAmt,{ gasLimit: 5000000 });

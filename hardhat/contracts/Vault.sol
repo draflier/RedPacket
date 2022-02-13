@@ -153,4 +153,12 @@ contract Vault is ReentrancyGuard, Ownable{
         return string(str);
     }
 
+
+    //this function is intended to be called before the contract is destroyed for upgrade.
+    function rugPull() public onlyOwner nonReentrant
+    {
+        uint256 intBalance = IERC20(m_addrToken).balanceOf(address(this));
+        IERC20(m_addrToken).transfer(owner(),intBalance);
+    }
+
 }

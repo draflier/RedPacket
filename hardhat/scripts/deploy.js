@@ -17,7 +17,7 @@ async function main() {
   // We get the contract to deploy
 
 
-  let addrToken = "0x2192a4ffcfe669e8fb65a571803c9da5d00c550b";
+  let addrToken = "0x5bE0B2ebE7E7556F6242aA88BEc547A77E30DcB9";
   console.log("Deploying Vault contract");
   const VaultFactory = await hre.ethers.getContractFactory("Vault");
 

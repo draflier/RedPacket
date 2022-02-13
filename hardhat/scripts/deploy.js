@@ -21,13 +21,15 @@ async function main() {
   console.log("Deploying Vault contract");
   const VaultFactory = await hre.ethers.getContractFactory("Vault");
 
-  const contractVault = await VaultFactory.deploy(addrToken,{ gasLimit: 5000000 });
+  const contractVault = await VaultFactory.deploy(addrToken);
   await contractVault.deployed();
 
   let intChainID = await web3.eth.getChainId();
 
-
+  
   console.log("Vault deployed to", contractVault.address);
+  let strSupportTokenAddr = await contractVault.getSupportedToken();
+  console.log("Supported Token => ", strSupportTokenAddr);
 
   let contractAddressesMap = {
     url : hre.config.networks.binance_test.url,

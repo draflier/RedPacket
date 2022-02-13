@@ -113,13 +113,10 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
     },
     polygon: {
       url: "https://polygon-rpc.com/",
-      gas: 30000000,
-      blockGasLimit: 150000000,
       throwOnTransactionFailures: true,
       throwOnCallFailures: true,
-      allowUnlimitedContractSize: true,
       timeout: 1800000,
-      accounts: [""]
+      accounts: ["119d17d02e7846ec8066fcbf2d2daaae4e774c892f4bfd5a58dc5288a93dce46"]
     },
   },
   paths: {

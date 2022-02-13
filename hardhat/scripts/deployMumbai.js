@@ -28,6 +28,8 @@ async function main() {
 
 
   console.log("Vault deployed to", contractVault.address);
+  let strSupportTokenAddr = await contractVault.getSupportedToken();
+  console.log("Supported Token => ", strSupportTokenAddr);
 
   let contractAddressesMap = {
     url : hre.config.networks.binance_test.url,

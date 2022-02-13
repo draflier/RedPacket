@@ -104,9 +104,6 @@ export default {
       console.log("Inside Redeem Fund");
       let strRedemptionCode = this.$refs.redemptionCode.value;
       await this.$store.dispatch("contracts/fetchVaultContract");
-      //await this.$store.dispatch("contracts/fetchIErc20Contract");
-      //console.log("Redeeming ==> " + strRedemptionCode);    
-      //let objCurrBalance = await this.getIErc20Contract.balanceOf(this.getActiveAccount); 
       await this.$store.dispatch("contracts/storeIsLoading",true );
       let objTxn = await this.getVaultContract.getRedPacket(strRedemptionCode);
       await this.getEthers.waitForTransaction(objTxn.hash,3);

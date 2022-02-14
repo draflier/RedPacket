@@ -108,12 +108,18 @@ export default {
       let strRedemptionCode = this.$refs.redemptionCode.value;
       await this.$store.dispatch("contracts/fetchVaultContract");
       await this.$store.dispatch("contracts/storeIsLoading",true );
-      let objTxn = await this.getVaultContract.getRedPacket(strRedemptionCode);
-      await this.getEthers.waitForTransaction(objTxn.hash,3);
+      try
+      {
+        let objTxn = await this.getVaultContract.getRedPacket(strRedemptionCode);
+        await this.getEthers.waitForTransaction(objTxn.hash,3);      
+        await this.$store.dispatch("contracts/storeIsRedeemed",true );
+        await this.$store.dispatch("contracts/storeIsLoading",false );
+      }
+      catch
+      {
+        await this.$store.dispatch("contracts/storeIsLoading",false );
+      }
       
-
-      await this.$store.dispatch("contracts/storeIsRedeemed",true );
-      await this.$store.dispatch("contracts/storeIsLoading",false );
       
     },
     isInputDisabled()

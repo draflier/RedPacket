@@ -125,10 +125,19 @@ export default {
 
 
       await this.$store.dispatch("contracts/storeIsLoading",true );
-      let objTxn = await this.getIErc20Contract.approve(addrVault,numApproveAmt);
-      await this.getEthers.waitForTransaction(objTxn.hash,3);
-      await this.$store.dispatch("contracts/storeIsERC20Approved",true );
-      await this.$store.dispatch("contracts/storeIsLoading",false );
+      try
+      {
+        let objTxn = await this.getIErc20Contract.approve(addrVault,numApproveAmt);
+        await this.getEthers.waitForTransaction(objTxn.hash,3);
+        await this.$store.dispatch("contracts/storeIsERC20Approved",true );
+        await this.$store.dispatch("contracts/storeIsLoading",false );
+      }
+      catch (err)
+      {
+        await this.$store.dispatch("contracts/storeIsLoading",false );
+      }
+      
+
     },
     async depositToken() 
     {
@@ -137,12 +146,17 @@ export default {
       let numApproveAmt = ethers.utils.parseUnits(intAmt,6);  
       console.log("DEPOSITING ==> " + intAmt);    
       await this.$store.dispatch("contracts/storeIsLoading",true );
-      let objTxn = await this.getVaultContract.deposit(numApproveAmt,{ gasLimit: 5000000 });
+      try
+      {
+        let objTxn = await this.getVaultContract.deposit(numApproveAmt,{ gasLimit: 5000000 });
+        await this.getEthers.waitForTransaction(objTxn.hash,3);
+        await this.showDepositedMsg()      
+      }
+      catch
+      {
+        await this.$store.dispatch("contracts/storeIsLoading",false );
+      }
 
-      await this.getEthers.waitForTransaction(objTxn.hash,3);
-      //await this.waitDeposit(200, 2);
-      await this.showDepositedMsg()
-      
       
       
     },

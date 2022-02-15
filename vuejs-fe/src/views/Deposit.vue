@@ -27,7 +27,7 @@
                       <label
                         class="block uppercase text-gray-700 text-xs font-bold mb-2"
                         for="grid-deposit"
-                        >Deposit Amount</label
+                        >Deposit the USDC you want for the Digital Red Packet</label
                       ><input
                         type="text"
                         class="border-0 px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full"

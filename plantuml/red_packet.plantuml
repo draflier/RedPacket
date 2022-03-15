@@ -1,21 +1,24 @@
 @startuml
 participant Sender
-participant Vault
+
+participant "Deposit Vault"
+participant "Transaction Vault"
 participant "QR Code"
 participant Receiver
 
 
-Sender -> Vault: Sends the USDC 
-activate Vault
-Vault -> "QR Code": Generates link in form of QR Code
+Sender -> "Deposit Vault" : Sends the USDC 
+"Deposit Vault" -> "Transaction Vault" : Deducts Transaction Fees
+activate "Deposit Vault"
+"Deposit Vault" -> "QR Code": Generates link in form of QR Code
 activate "QR Code"
 "QR Code" -> Sender: QR Code is send to Sender to give to Receiver
 Sender -> Receiver: QR Code is sent to receiver 
 Receiver -> "QR Code": Receiver scans QR Code
 
-"QR Code" -> Vault: QR Code authenticates and authorizes the funds to be moved to receiver.
+"QR Code" -> "Deposit Vault": QR Code authenticates and \nauthorizes the funds to be moved to receiver.
 deactivate "QR Code"
-Vault -> Receiver: Send funds to receiver
-deactivate Vault
+"Deposit Vault" -> Receiver: Send funds to receiver
+deactivate "Deposit Vault"
 
 @enduml

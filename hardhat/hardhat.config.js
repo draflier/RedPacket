@@ -1,6 +1,5 @@
 require("@nomiclabs/hardhat-waffle");
-require("@nomiclabs/hardhat-ethers");
-require("@nomiclabs/hardhat-truffle5");
+require("@nomiclabs/hardhat-etherscan");
 require('dotenv').config();
 
 // This is a sample Hardhat task. To learn how to create your own go to
@@ -103,26 +102,34 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
       url: "https://matic-mumbai.chainstacklabs.com",
       gas: 30000000,
       blockGasLimit: 150000000,
+    },
+    truffdash: {
+      url: "http://localhost:24012/rpc",
       throwOnTransactionFailures: true,
       throwOnCallFailures: true,
       timeout: 1800000,
       allowUnlimitedContractSize: true,
-      accounts: ["a182030a6b1e20a5213b26c10d24cf1c9dcbb877b2a1dacb0e336161a0c9cd7c",
-      "119d17d02e7846ec8066fcbf2d2daaae4e774c892f4bfd5a58dc5288a93dce46",
-      "aa3d2a926277da2d595bf78324b1fd696e6709433e3dcd6a8946dbb509fcede4"]
     },
     polygon: {
       url: "https://polygon-rpc.com/",
       throwOnTransactionFailures: true,
       throwOnCallFailures: true,
       timeout: 1800000,
-      accounts: ["119d17d02e7846ec8066fcbf2d2daaae4e774c892f4bfd5a58dc5288a93dce46"]
     },
+    polygon_mumbai: {
+      url: "https://rpc-mumbai.maticvigil.com",
+    }
   },
   paths: {
     sources: './contracts',
     tests: './test',
     artifacts: './artifacts'
+  },
+  etherscan: {
+    apiKey: {
+      bscTestnet: '1J8PS5D71ZU65PRVK5ZY5Z2N2ZTRFHAYTS',
+      polygonMumbai: '1AZBW8BCZED1H2XPMH7I4HXFKYWSGBV95B'
+    }
   },
   gasReporter: {
     currency: 'USD',

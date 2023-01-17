@@ -62,7 +62,7 @@
           <li class="flex items-center">
             <a
               class="lg:text-white lg:hover:text-gray-300 text-gray-800 px-3 py-4 lg:py-2 flex items-center text-xs uppercase font-bold"
-              href="https://github.com/Draf-Solution/RedPacket/tree/uat"
+              href="https://github.com/draflier/RedPacket/tree/uat"
               ><i
                 class="lg:text-gray-300 text-gray-500 fab fa-github text-lg leading-lg "
               ></i

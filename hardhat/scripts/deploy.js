@@ -17,19 +17,17 @@ async function main() {
   // We get the contract to deploy
 
 
-  let addrToken = "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174";
+  let addrToken = "0xE8D54a49f21E0536D219A4774A1A513175d8Ffba";
   console.log("Deploying Vault contract");
   const VaultFactory = await hre.ethers.getContractFactory("Vault");
 
   const contractVault = await VaultFactory.deploy(addrToken);
   await contractVault.deployed();
 
-  let intChainID = await web3.eth.getChainId();
+  //let intChainID = await web3.eth.getChainId();
+  let intChainID = await (await hre.ethers.getDefaultProvider().getNetwork()).chainId;
 
-  
-  console.log("Vault deployed to", await contractVault.resolvedAddress);
-  let strSupportTokenAddr = await contractVault.getSupportedToken();
-  console.log("Supported Token => ", strSupportTokenAddr);
+  console.log("Vault deployed to", contractVault.address);
 
   let contractAddressesMap = {
     url : hre.config.networks.binance_test.url,
@@ -43,6 +41,11 @@ fs.copyFileSync('./hardhat_cfg.json', '../vuejs-fe/src/artifacts/hardhat_cfg.jso
 fs.copyFileSync('./artifacts/contracts/IERC20.sol/IERC20.json', '../vuejs-fe/src/artifacts/IERC20.json');
 fs.copyFileSync('./artifacts/contracts/Vault.sol/Vault.json', '../vuejs-fe/src/artifacts/Vault.json');
 
+try{
+  await run("verify:verify", { address: contractVault.address, constructorArguments: [addrToken], contract: "contracts/Vault.sol:Vault" });
+}catch(e){
+    console.log(e);
+}
 
 }
 

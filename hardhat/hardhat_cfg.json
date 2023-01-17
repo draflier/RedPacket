@@ -1,5 +1,5 @@
 {
   "url": "https://data-seed-prebsc-1-s1.binance.org:8545/",
-  "chain_id": 1,
-  "vault_addr": "0x850E83fc8da8bb40695Cd8B322e1bC648c8b25a0"
+  "chain_id": "137",
+  "vault_addr": "0xe2cAaE96CFBAcC3a93d22c4a37EC1Cf3a89FbbCb"
 }

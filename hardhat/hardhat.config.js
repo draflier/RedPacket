@@ -128,7 +128,8 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
   etherscan: {
     apiKey: {
       bscTestnet: '1J8PS5D71ZU65PRVK5ZY5Z2N2ZTRFHAYTS',
-      polygonMumbai: '1AZBW8BCZED1H2XPMH7I4HXFKYWSGBV95B'
+      polygonMumbai: '1AZBW8BCZED1H2XPMH7I4HXFKYWSGBV95B',
+      polygon: '1AZBW8BCZED1H2XPMH7I4HXFKYWSGBV95B'
     }
   },
   gasReporter: {

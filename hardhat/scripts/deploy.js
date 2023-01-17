@@ -17,7 +17,7 @@ async function main() {
   // We get the contract to deploy
 
 
-  let addrToken = "0xE8D54a49f21E0536D219A4774A1A513175d8Ffba";
+  let addrToken = "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174";
   console.log("Deploying Vault contract");
   const VaultFactory = await hre.ethers.getContractFactory("Vault");
 
@@ -25,7 +25,8 @@ async function main() {
   await contractVault.deployed();
 
   //let intChainID = await web3.eth.getChainId();
-  let intChainID = await (await hre.ethers.getDefaultProvider().getNetwork()).chainId;
+  //let intChainID = await hre.ethers.getDefaultProvider().getNetwork().chainId;
+  let intChainID = "137";
 
   console.log("Vault deployed to", contractVault.address);
 
